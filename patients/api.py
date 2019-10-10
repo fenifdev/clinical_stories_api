@@ -11,4 +11,6 @@ class PatientViewSet(viewsets.ModelViewSet):
     serializer_class = PatientSerializer
 
     def list(self, request):
-        return Response([])
+        queryset = Patient.objects.all()
+        serializer = PatientSerializer(queryset, many=True)
+        return Response(serializer.data)
