@@ -61,4 +61,19 @@ class TestEndpoints(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data.get('name'), patient.name)
 
+    def test_delete_patient(self):
+        """
+        Ensure we delete a patient.
+        """
+        patient = Patient.objects.create(
+            name='mike'
+        )
+        patient.save()
+
+        url = reverse('patients-detail', kwargs={'pk':patient.id})
+
+        response = self.client.delete(url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(Patient.objects.count(), 0)
 
