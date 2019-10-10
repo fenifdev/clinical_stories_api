@@ -45,4 +45,20 @@ class TestEndpoints(APITestCase):
         self.assertEqual(Patient.objects.count(), 1)
         self.assertEqual(response.data.get('name'), data.get('name'))
 
+    def test_show_patient(self):
+        """
+        Ensure we show a patient.
+        """
+        patient = Patient.objects.create(
+            name='mike'
+        )
+        patient.save()
+
+        url = reverse('patients-detail', kwargs={'pk':patient.id})
+
+        response = self.client.get(url, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data.get('name'), patient.name)
+
 
