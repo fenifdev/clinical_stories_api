@@ -33,3 +33,16 @@ class TestEndpoints(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(len(response.data), 2)
 
+    def test_create_patient(self):
+        """
+        Ensure we create a patient.
+        """
+        url = reverse('patients-list')
+        data = {'name': 'mike'}
+        response = self.client.post(url, data, format='json')
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(Patient.objects.count(), 1)
+        self.assertEqual(response.data.get('name'), data.get('name'))
+
+
